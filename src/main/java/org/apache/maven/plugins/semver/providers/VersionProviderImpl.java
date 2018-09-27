@@ -39,13 +39,18 @@ public class VersionProviderImpl implements VersionProvider {
     int minorVersion;
     int patchVersion;
 
+    boolean isSnapshot;
+    
     String[] rawVersion = pomVersion.split("\\.");
     if (rawVersion.length > 0 && rawVersion.length == 3) {
       LOG.debug("Set version-variables from POM.xml");
       LOG.debug(SemverMavenPlugin.MOJO_LINE_BREAK);
       majorVersion = Integer.valueOf(rawVersion[0]);
       minorVersion = Integer.valueOf(rawVersion[1]);
-      patchVersion = Integer.valueOf(rawVersion[2].substring(0, rawVersion[2].lastIndexOf('-')));
+      isSnapshot = rawVersion[2].endsWith( "SNAPSHOT") ;
+      patchVersion = isSnapshot 
+              ? Integer.valueOf(rawVersion[2].substring(0, rawVersion[2].lastIndexOf('-')))
+              : Integer.valueOf(rawVersion[2]);
     } else {
       LOG.error("Unrecognized version-pattern");
       LOG.error("Semver plugin is terminating");
@@ -57,18 +62,26 @@ public class VersionProviderImpl implements VersionProvider {
     LOG.debug("PATCH-version                     : [ {} ]", patchVersion);
     LOG.debug(SemverMavenPlugin.MOJO_LINE_BREAK);
 
-    if(semverGoal == SemverGoal.SEMVER_GOAL.MAJOR) {
-      majorVersion = majorVersion + 1;
-      minorVersion = 0;
-      patchVersion = 0;
-    } else if(semverGoal == SemverGoal.SEMVER_GOAL.MINOR) {
-      minorVersion = minorVersion + 1;
-      patchVersion = 0;
-    } else if(semverGoal == SemverGoal.SEMVER_GOAL.PATCH) {
-      patchVersion = patchVersion + 1;
-    }
+    if(null != semverGoal) switch ( semverGoal )
+      {
+          case MAJOR:
+              majorVersion = majorVersion + 1;
+              minorVersion = 0;
+              patchVersion = 0;
+              break;
+          case MINOR:
+              minorVersion = minorVersion + 1;
+              patchVersion = 0;
+              break;
+          case PATCH:
+              patchVersion = patchVersion + 1;
+              break;
+          default:
+              break;
+      }
 
-    String developmentVersion = majorVersion + "." + minorVersion + "." + patchVersion + "-SNAPSHOT";
+    String developmentVersion = majorVersion + "." + minorVersion + "." + patchVersion;
+    if (isSnapshot) developmentVersion = developmentVersion + "-SNAPSHOT";
 
 
     //TODO:SH move this part to a RunModeNative and RunModeNativeRpm implementation
