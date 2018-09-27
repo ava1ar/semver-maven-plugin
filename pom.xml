@@ -86,7 +86,7 @@
                 <configuration>
                     <scmUsername>ava1ar</scmUsername>
                     <scmPassword>7dbd0e8771a8dc36e5ac2469ac69516cf7749adc</scmPassword>
-                    <runMode>RELEASE</runMode>
+                    <runMode>NATIVE</runMode>
                 </configuration> 
             </plugin>
             <plugin>
