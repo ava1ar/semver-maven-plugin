@@ -85,8 +85,7 @@
                 <version>${maven.semver.plugin-version}</version>
                 <configuration>
                     <scmUsername>ava1ar</scmUsername>
-                    <scmPassword>7dbd0e8771a8dc36e5ac2469ac69516cf7749adc</scmPassword>
-                    <runMode>NATIVE</runMode>
+                    <runMode>RELEASE</runMode>
                 </configuration> 
             </plugin>
             <plugin>
