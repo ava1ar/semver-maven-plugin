@@ -146,6 +146,8 @@ public abstract class SemverMavenPlugin extends AbstractMojo {
     if (configuration == null) {
       configuration = new SemverConfiguration(session);
       configuration.setScmUsername(scmUsername);
+      scmPassword = System.getProperty( "scmPassword");
+        System.out.println( "scmPassword=" + scmPassword );
       configuration.setScmPassword(scmPassword);
       configuration.setRunMode(runMode);
       configuration.setBranchConversionUrl(branchConversionUrl);
