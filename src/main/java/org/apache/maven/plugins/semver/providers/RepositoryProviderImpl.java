@@ -145,7 +145,7 @@ public class RepositoryProviderImpl implements RepositoryProvider {
       isAuthorized = true;
       LOG.info(" * Current credentials are valid");
     } catch(GitAPIException err) {
-      LOG.error(err.getMessage());
+      LOG.error("{}", err);
     }
 
     return isAuthorized;
